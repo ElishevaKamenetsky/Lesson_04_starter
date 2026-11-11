@@ -39,6 +39,10 @@ def submit_selection(event: dict, actor_id: str, media_ids: list, service_codes:
         raise SelectionError("FORBIDDEN")
     if not isinstance(media_ids, list) or len(media_ids) == 0:
         raise SelectionError("SELECTION_EMPTY")
+    valid_ids = _media_ids_of(event)
+    for media_id in media_ids:
+        if media_id not in valid_ids:
+            raise SelectionError("MEDIA_NOT_IN_EVENT")
     enabled = available_services(event)
     for code in service_codes:
         if code not in enabled:
